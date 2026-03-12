@@ -1,0 +1,3 @@
+window.HAWKER_HUNT_CONFIG = window.HAWKER_HUNT_CONFIG || {
+  API_BASE_URL: '',
+};

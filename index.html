@@ -3,148 +3,427 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="shortcut icon" type="image/png" href="/logo3.png" />
-
+    <meta
+      name="description"
+      content="Discover nearby food spots in Singapore by cuisine, budget, and Google ratings."
+    />
+    <title>Where Ken Eat?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <script
-    defer
-    src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
-    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-    crossorigin=""
-  ></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
-    />
-    <script
-      defer
-      src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"
-    ></script>
-    <!-- <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
-      defer
-    ></script> -->
-
     <link rel="stylesheet" href="style.css" />
-    <script defer data-main="script.js" src="scripts/require.js"></script>
-<!-- <script defer src="script.js"></script> -->
-    <title>BlueMap</title>
+    <script defer src="site-config.js"></script>
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script defer src="script.js"></script>
   </head>
   <body>
-    <div class="sidebar">
-      <img src="logo.png" alt="Logo" class="logo" />
+    <div class="page-shell">
+      <header class="top-bar">
+        <div class="brand-block brand-block--compact">
+          <p class="eyebrow">Singapore Food Discovery</p>
+          <h1>Where Ken Eat?</h1>
+        </div>
 
-      <ul class="workouts">
-        <form class="form hidden">
-          <div class="form__row">
-            <label class="form__label">Type</label>
-            <select class="form__input form__input--type">
-              <option value="running">Running</option>
-              <option value="cycling">Cycling</option>
-            </select>
-          </div>
-          <div class="form__row">
-            <label class="form__label">Distance</label>
-            <input class="form__input form__input--distance" placeholder="km" />
-          </div>
-          <div class="form__row">
-            <label class="form__label">Duration</label>
-            <input
-              class="form__input form__input--duration"
-              placeholder="min"
-            />
-          </div>
-          <div class="form__row">
-            <label class="form__label">Cadence</label>
-            <input
-              class="form__input form__input--cadence"
-              placeholder="step/min"
-            />
-          </div>
-          <div class="form__row form__row--hidden">
-            <label class="form__label">Elev Gain</label>
-            <input
-              class="form__input form__input--elevation"
-              placeholder="meters"
-            />
-          </div>
-          <button class="form__btn">OK</button>
-        </form>
+        <div class="top-bar__actions">
+          <button class="primary-button" id="locateBtn" type="button">
+            Use my location
+          </button>
+          <button class="ghost-button" id="scanBtn" type="button">
+            Refresh nearby
+          </button>
 
-        <!-- <li class="workout workout--running" data-id="1234567890">
-          <h2 class="workout__title">Running on April 14</h2>
-          <div class="workout__details">
-            <span class="workout__icon">🏃‍♂️</span>
-            <span class="workout__value">5.2</span>
-            <span class="workout__unit">km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⏱</span>
-            <span class="workout__value">24</span>
-            <span class="workout__unit">min</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⚡️</span>
-            <span class="workout__value">4.6</span>
-            <span class="workout__unit">min/km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">🦶🏼</span>
-            <span class="workout__value">178</span>
-            <span class="workout__unit">spm</span>
-          </div>
-        </li>
+          <section class="dock-card filter-card is-open" data-panel="filters">
+            <div class="dock-head">
+              <button
+                class="dock-toggle"
+                id="filtersToggle"
+                type="button"
+                aria-expanded="true"
+              >
+                <span class="dock-toggle__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" class="dock-toggle__svg">
+                    <path d="M4 6h16M7 12h10M10 18h4" />
+                  </svg>
+                </span>
+                <span>Filters</span>
+              </button>
+              <button class="text-button" id="resetBtn" type="button">
+                Reset
+              </button>
+            </div>
+            <div class="dock-body">
+              <div class="field-group">
+                <label for="radiusSelect">Search radius</label>
+                <select id="radiusSelect">
+                  <option value="600">600 m</option>
+                  <option value="1200" selected>1.2 km</option>
+                  <option value="2500">2.5 km</option>
+                  <option value="5000">5 km</option>
+                </select>
+              </div>
 
-        <li class="workout workout--cycling" data-id="1234567891">
-          <h2 class="workout__title">Cycling on April 5</h2>
-          <div class="workout__details">
-            <span class="workout__icon">🚴‍♀️</span>
-            <span class="workout__value">27</span>
-            <span class="workout__unit">km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⏱</span>
-            <span class="workout__value">95</span>
-            <span class="workout__unit">min</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⚡️</span>
-            <span class="workout__value">16</span>
-            <span class="workout__unit">km/h</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⛰</span>
-            <span class="workout__value">223</span>
-            <span class="workout__unit">m</span>
-          </div>
-        </li> -->
-      </ul>
+              <div class="field-group">
+                <label for="sortSelect">Sort places by</label>
+                <select id="sortSelect">
+                  <option value="DISTANCE" selected>Closest first</option>
+                  <option value="POPULARITY">Most popular</option>
+                </select>
+              </div>
 
-      <p class="copyright">
-        &copy; Copyright.
-        <br />Idea:
-        <a target="_blank" href="https://www.linkedin.com/in/zkchangken/"
-          >Ken</a
-        >
-        ; Created:
-        <a
-          target="_blank"
-          href="https://www.linkedin.com/in/wilfredongzhaoloong/"
-          >Wilfred</a
-        >
-      </p>
+              <div class="field-group field-group--compact">
+                <span>Fitness profile</span>
+                <div class="fitness-grid">
+                  <label class="mini-field">
+                    <span>Weight (kg)</span>
+                    <input id="weightInput" type="number" min="20" max="250" value="70" />
+                  </label>
+                  <label class="mini-field">
+                    <span>Age</span>
+                    <input id="ageInput" type="number" min="10" max="100" value="30" />
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <span>Price range</span>
+                <div class="chip-row" id="priceFilters">
+                  <button class="chip is-active" type="button" data-price="">
+                    Any
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-price="PRICE_LEVEL_INEXPENSIVE"
+                  >
+                    $
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-price="PRICE_LEVEL_MODERATE"
+                  >
+                    $$
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-price="PRICE_LEVEL_EXPENSIVE"
+                  >
+                    $$$
+                  </button>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <span>Cuisine</span>
+                <div class="chip-grid" id="cuisineFilters">
+                  <button
+                    class="chip is-active"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="restaurant"
+                    data-label="Top food spots"
+                  >
+                    All
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="food_court"
+                    data-label="Hawker picks"
+                  >
+                    Hawker
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="cafe"
+                    data-label="Cafe picks"
+                  >
+                    Cafe
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="chinese_restaurant"
+                    data-label="Chinese picks"
+                  >
+                    Chinese
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="indian_restaurant"
+                    data-label="Indian picks"
+                  >
+                    Indian
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="malaysian_restaurant"
+                    data-label="Malaysian picks"
+                  >
+                    Malaysian
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="japanese_restaurant"
+                    data-label="Japanese picks"
+                  >
+                    Japanese
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="korean_restaurant"
+                    data-label="Korean picks"
+                  >
+                    Korean
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="seafood_restaurant"
+                    data-label="Seafood picks"
+                  >
+                    Seafood
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="nearby"
+                    data-type="vegetarian_restaurant"
+                    data-label="Vegetarian picks"
+                  >
+                    Vegetarian
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="text"
+                    data-query="chicken rice"
+                    data-label="Chicken rice picks"
+                  >
+                    Chicken Rice
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="text"
+                    data-query="laksa"
+                    data-label="Laksa picks"
+                  >
+                    Laksa
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="text"
+                    data-query="nasi lemak"
+                    data-label="Nasi lemak picks"
+                  >
+                    Nasi Lemak
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="text"
+                    data-query="prata"
+                    data-label="Prata picks"
+                  >
+                    Prata
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="text"
+                    data-query="bak kut teh"
+                    data-label="Bak Kut Teh picks"
+                  >
+                    Bak Kut Teh
+                  </button>
+                  <button
+                    class="chip"
+                    type="button"
+                    data-mode="text"
+                    data-query="satay"
+                    data-label="Satay picks"
+                  >
+                    Satay
+                  </button>
+                </div>
+              </div>
+
+              <label class="toggle-row" for="openNowCheckbox">
+                <span>Only show places open now</span>
+                <input id="openNowCheckbox" type="checkbox" />
+              </label>
+            </div>
+          </section>
+
+          <section class="dock-card results-panel" data-panel="results">
+            <div class="dock-head">
+              <button
+                class="dock-toggle"
+                id="resultsToggle"
+                type="button"
+                aria-expanded="false"
+              >
+                <span class="dock-toggle__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" class="dock-toggle__svg">
+                    <path d="M12 3l6 6-6 12L6 9l6-6z" />
+                    <path d="M12 9l2 2-2 5-2-5 2-2z" />
+                  </svg>
+                </span>
+                <span>Nearby picks</span>
+              </button>
+              <div class="pill" id="resultCount">0 spots</div>
+            </div>
+            <div class="dock-body">
+              <div class="results-head">
+                <div>
+                  <p class="section-label">Nearby picks</p>
+                  <h2 id="resultsTitle">Ready when you are</h2>
+                </div>
+              </div>
+              <div class="status-banner" id="statusBanner">
+                Enable location to discover food spots around you.
+              </div>
+              <div class="results-list" id="resultsList"></div>
+            </div>
+          </section>
+
+          <section class="dock-card saved-panel" data-panel="saved">
+            <div class="dock-head">
+              <button
+                class="dock-toggle"
+                id="savedToggle"
+                type="button"
+                aria-expanded="false"
+              >
+                <span class="dock-toggle__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" class="dock-toggle__svg">
+                    <path d="M7 5h10a2 2 0 0 1 2 2v12l-7-4-7 4V7a2 2 0 0 1 2-2z" />
+                  </svg>
+                </span>
+                <span>Saved list</span>
+              </button>
+              <div class="pill" id="savedCount">0 saved</div>
+            </div>
+            <div class="dock-body">
+              <div class="results-head">
+                <div>
+                  <p class="section-label">Saved list</p>
+                  <h2>Your go-to spots</h2>
+                </div>
+              </div>
+              <div class="saved-list" id="savedList"></div>
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <main class="map-stage">
+        <div class="map-frame">
+          <div class="map-overlay">
+            <p class="section-label">Live map</p>
+            <div class="map-overlay__meta">
+              <strong id="locationLabel">Singapore</strong>
+              <span id="apiStatus">Waiting for location</span>
+            </div>
+          </div>
+
+          <section class="details-drawer details-drawer--floating is-empty" id="detailsDrawer">
+            <div class="drawer-head">
+              <div>
+                <p class="section-label">Selected place</p>
+                <h2 id="drawerTitle">Pick a place on the map</h2>
+              </div>
+              <a
+                id="drawerMapsLink"
+                class="text-button hidden"
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open in Google Maps"
+                title="Open in Google Maps"
+              >
+                <img src="maps_512dp.png" alt="" class="maps-icon-image" />
+              </a>
+            </div>
+            <div class="drawer-meta" id="drawerMeta">
+              We will show rating, address, opening hours, and review snippets here.
+            </div>
+            <div class="route-summary hidden" id="routeSummary"></div>
+              <div class="route-mode hidden" id="routeModeGroup">
+              <button
+                class="chip is-active"
+                id="walkModeBtn"
+                type="button"
+                data-route-mode="walk"
+                aria-label="Walking mode"
+                title="Walking mode"
+              >
+                <svg viewBox="0 0 24 24" class="mode-icon" aria-hidden="true">
+                  <circle cx="12" cy="5" r="2" />
+                  <path d="M12 7l-2 4 2 3 1 5M12 7l3 3 3 1M10 11l-3 3M11 14l4-1" />
+                </svg>
+              </button>
+              <button
+                class="chip"
+                id="jogModeBtn"
+                type="button"
+                data-route-mode="jog"
+                aria-label="Jogging mode"
+                title="Jogging mode"
+              >
+                <svg viewBox="0 0 24 24" class="mode-icon" aria-hidden="true">
+                  <circle cx="14" cy="5" r="2" />
+                  <path d="M14 7l-2 3 2 2 3 1M12 10l-2 4-3 2M14 12l-1 6M10 14l2 5" />
+                </svg>
+              </button>
+                <button class="chip" id="roundTripBtn" type="button" data-round-trip="false">
+                  One way
+                </button>
+              </div>
+            <div class="drawer-actions">
+              <button class="primary-button hidden" id="routeBtn" type="button">
+                Show jogging path
+              </button>
+              <button class="ghost-button hidden" id="clearRouteBtn" type="button">
+                Clear path
+              </button>
+            </div>
+            <div class="review-stack" id="reviewStack"></div>
+          </section>
+
+          <div id="map"></div>
+        </div>
+      </main>
     </div>
-
-    <div id="map"></div>
   </body>
 </html>

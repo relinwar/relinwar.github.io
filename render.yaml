@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: hawker-hunt-api
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: npm start
+    envVars:
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: PORT
+        value: 10000
