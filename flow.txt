@@ -1,0 +1,194 @@
+1. Module: Australia Dataload
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_db1[Source: Wholesale Funding DB<br/>Loaded previous day 11:00 AM]
+    src_web1[Source: External Web RBA/APRA<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc1{ILMA System<br/>Timing: 9:30 AM Once Daily}
+
+    %% Output Destinations
+    out_db1[(Output: ILMA Internal DB<br/>Table: tbl_txn_wholesale_au)]
+
+    %% Connections
+    src_db1 --> proc1
+    src_web1 --> proc1
+    proc1 --> out_db1
+2. Module: BBG News Symphony
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_email2[Source: TLM User Email]
+
+    %% Processing and Timing
+    proc2{ILMA System<br/>Timing: Daily 12:00 AM & 7:00 AM}
+
+    %% Output Destinations
+    out_chat2[Output: ILMS Symphony Chat Group]
+
+    %% Connections
+    src_email2 --> proc2
+    proc2 --> out_chat2
+3. Module: Bill Auction
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_web3[Source: External Web<br/>treasurydirect.gov<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc3{ILMA System<br/>Timing: Daily 12:00 AM & 7:00 AM}
+
+    %% Output Destinations
+    out_db3[(Output: ILMA Internal DB<br/>Table: tbl_txn_billauction)]
+    out_email3[Output: TLM User Email]
+
+    %% Connections
+    src_web3 --> proc3
+    proc3 --> out_db3
+    proc3 --> out_email3
+4. Module: Central Bank USDFED
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_web4[Source: External Web<br/>markets.newyorkfed.org<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc4{ILMA System<br/>Timing: Daily 1:30 PM}
+
+    %% Output Destinations
+    out_db4[(Output: ILMA Internal DB<br/>Table: tbl_txn_cbusd)]
+
+    %% Connections
+    src_web4 --> proc4
+    proc4 --> out_db4
+5. Module: Fed Balance Sheet
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_web5[Source: External Web<br/>federalreserve.gov<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc5{ILMA System<br/>Timing: Weekly Friday 8:00 AM}
+
+    %% Output Destinations
+    out_db5[(Output: ILMA Internal DB<br/>Table: tbl_fed_balancesheet)]
+    out_email5[Output: TLM User Email]
+    out_chat5[Output: TIMS Symphony Chat Group]
+
+    %% Connections
+    src_web5 --> proc5
+    proc5 --> out_db5
+    proc5 --> out_email5
+    proc5 --> out_chat5
+6. Module: Fixed Deposit
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_drivex6[Source: ILMS Drivex<br/>(Data Ledger MOT/RMG)]
+
+    %% Processing and Timing
+    proc6{ILMA System<br/>Timing: Wed-Sun 9:30 AM}
+
+    %% Output Destinations
+    out_db6[(Output: ILMA Internal DB<br/>Table: tbl_txn_fixed_deposit)]
+
+    %% Connections
+    src_drivex6 --> proc6
+    proc6 --> out_db6
+7. Module: FPS
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_scp7[Source: IPE2<br/>via SCP]
+
+    %% Processing and Timing
+    proc7{ILMA System<br/>Timing: Daily 3:00 PM, 5:30 PM}
+
+    %% Output Destinations
+    out_db7[(Output: ILMA Internal DB<br/>Table: tbl_txn_fps)]
+    out_email7[Output: TLM Hong Kong User Email]
+
+    %% Connections
+    src_scp7 --> proc7
+    proc7 --> out_db7
+    proc7 --> out_email7
+8. Module: ICIMMF
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_web8[Source: External Web<br/>ici.org<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc8{ILMA System<br/>Timing: Monthly 24th 9:30 AM}
+
+    %% Output Destinations
+    out_db8[(Output: ILMA Internal DB<br/>Tables: tbl_txn_mmf_parents,<br/>tbl_txn_mmf_monthlytax_security)]
+
+    %% Connections
+    src_web8 --> proc8
+    proc8 --> out_db8
+9. Module: LRP
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_file9[Source: Portfolio_Country.xlsx<br/>via Drivex (Static)]
+    src_murex9[Source: DBSSG_TLM_DEFAULT_v2<br/>from Murex]
+    src_db9[Source: Wholesale Funding<br/>ILMA Internal DB]
+
+    %% Processing and Timing
+    proc9{ILMA System<br/>Timing: Mon-Fri 11:30 AM}
+
+    %% Output Destinations
+    out_db9[(Output: ILMA Internal DB<br/>Table: tbl_txn_lrp_live)]
+
+    %% Connections
+    src_file9 --> proc9
+    src_murex9 --> proc9
+    src_db9 --> proc9
+    proc9 --> out_db9
+10. Module: TIC Dataload
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_web10[Source: External Web<br/>ticdata.treasury.gov<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc10{ILMA System<br/>Timing: Monthly 18th 8:30 AM}
+
+    %% Output Destinations
+    out_db10[(Output: ILMA Internal DB<br/>Tables: tbl_txn_tic_npr_history,<br/>tbl_txn_tic_foreign_res_ltsec,<br/>tbl_txn_tic_ctry_holdings)]
+
+    %% Connections
+    src_web10 --> proc10
+    proc10 --> out_db10
+11. Module: Taiwan Centralbank and ETF
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_web11[Source: External Web<br/>cbc.gov.tw & tpex.org.tw<br/>via TNMADA Toolkit]
+
+    %% Processing and Timing
+    proc11{ILMA System<br/>Timing: Monthly 8th 12:00 AM}
+
+    %% Output Destinations
+    out_db11[(Output: ILMA Internal DB<br/>Table: tbl_txn_tw_xxxx<br/>(Depends on data type))]
+
+    %% Connections
+    src_web11 --> proc11
+    proc11 --> out_db11
+12. Module: Warning Signal
+Code snippet
+flowchart TD
+    %% Source Data Nodes
+    src_bbg12[Source: Bloomberg<br/>via BPIPE]
+
+    %% Processing and Timing
+    proc12{ILMA System<br/>Timing: Daily throughout day<br/>(Depending on tickers)}
+
+    %% Output Destinations
+    out_db12[(Output: ILMA Internal DB<br/>Table: tbl_txn_warningsignal_livetable_v2)]
+
+    %% Connections
+    src_bbg12 --> proc12
+    proc12 --> out_db12
